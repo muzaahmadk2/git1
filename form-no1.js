@@ -60,82 +60,105 @@
 // container.insertBefore(newDiv,secondli);
 
 var form = document.getElementById('addForm');
-var item = document.getElementById('items');
+var exp = document.getElementById('expenses');
+var expense = document.getElementById('expense');
+var dis = document.getElementById('discription');
+var cat = document.getElementById('catogory');
 
 //form submit event
 
-form.addEventListener('submit' , additem);
-function additem(e){
+form.addEventListener('submit' , addexpense);
+function addexpense(e){
     e.preventDefault();
+
+    //add to local storage
+
+    let item = localStorage.getItem('userdetails') || '[]';
+        item = JSON.parse(item);
+        item.push({expense: expense.value, discription: dis.value , catogory:cat.value});
+        localStorage.setItem('userdetails', JSON.stringify(item));
 
     //creat li item
 
-    var n = document.getElementById('item').value;
+    var n = document.getElementById('expense').value;
     var d = document.getElementById('discription').value;
+    var c = document.getElementById('catogory').value;
     var li = document.createElement('li');
     li.className = 'list-group-item';
-    li.appendChild(document.createTextNode(n));
+    li.appendChild(document.createTextNode(`${n}${"-"}`));
 
     //add discription
 
-    li.appendChild(document.createTextNode(`${" "}${d}`));
-    //li.appendChild(document.createTextNode(d));
+    li.appendChild(document.createTextNode(d));
+
+    //add catogory
+
+    li.appendChild(document.createTextNode(`${"-"}${c}`));
 
 
     //create delete button
 
     var butt = document.createElement('button');
     butt.className = 'btn btn-danger btn-sm float-right delete';
-    butt.appendChild(document.createTextNode('X'));
+    butt.appendChild(document.createTextNode('Delete expense'));
     li.appendChild(butt);
 
     //create edit button
 
     var ebutt = document.createElement('button');
     ebutt.className = 'btn btn-sm float-right editBtn';
-    ebutt.appendChild(document.createTextNode('Edit'));
+    ebutt.appendChild(document.createTextNode('Edit expense'));
     //ebutt.style.marginLeft = '900px';
     li.appendChild(ebutt);
 
     //append li list item
 
-    item.appendChild(li);
+    exp.appendChild(li);
 
 
 }
 //delete event
-item.addEventListener('click' , remove);
+expenses.addEventListener('click' , remove);
 function remove(e){
     if(e.target.classList.contains('delete')){
         if(confirm('Are You Sure?')){
           var li = e.target.parentElement;
-          item.removeChild(li);
+          var d =li.childNodes[1].textContent;
+          exp.removeChild(li);
+          let k =JSON.parse(localStorage.getItem('userdetails'));
+          if(k){
+            k = k.filter(element => {
+              return element.discription != d;
+                
+            });
         }
+        localStorage.setItem('userdetails', JSON.stringify(k));
       }
+    }
 
 }
 
-//filter 
-
-var filter = document.getElementById('filter');
-filter.addEventListener('keyup' , fileritem);
-var itemlist = document.getElementsByTagName('li');
-function fileritem(e){
-    var text = e.target.value.toLowerCase();
-    //console.log(items);
-    Array.from(itemlist).forEach(function(i){
-        var itemname1 = i.firstChild.textContent;
-        var itemname2 = i.childNodes;
-        //var j = itemname2[2].textContent;
-        // console.log(itemname2[2]);
-        if(itemname1.toLowerCase().indexOf(text) != -1 || itemname2[1].textContent.toLowerCase().indexOf(text) != -1)
-        {
-            i.style.display = 'block';
-        }
-        else{
-            i.style.display = 'none';
-        }
-
-    })
-
+//edit event
+expenses.addEventListener('click',edit);
+function edit(e){
+    if(e.target.classList.contains('editBtn')){
+        var li = e.target.parentElement;
+        var d =li.childNodes[1].textContent;
+        console.log(d);
+        exp.removeChild(li);
+        let k =JSON.parse(localStorage.getItem('userdetails'));
+          if(k){
+            k = k.filter(element => {
+              if(element.discription == d){
+                expense.value = element.expense;
+                dis.value = element.discription;
+                cat.value = element.catogory;
+              }
+              return element.discription != d;
+                
+            });
+    
+          }
+          localStorage.setItem('userdetails', JSON.stringify(k));
+    }
 }
