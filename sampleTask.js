@@ -160,117 +160,260 @@
 // lastEditedInSecondsAgo();
 // //clearInterval(timer)
 
-const posts =[
+// const posts =[
+//         {title:'post one',body:'this is posst one'},
+//         {title:'post two',body:'this is post two'}
+//     ];
+    
+// function getPost()
+// {
+//     setTimeout(()=>{
+//         let op ='';
+//         posts.forEach((post)=>{
+//             op += `<li>${post.title}</li>`;
+//         })
+//         document.body.innerHTML = op;
+        
+//     },1000)
+// }
+// //getPost();
+    
+// function createPost(post)
+// {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() =>{
+//             posts.push(post);
+            
+//             const error = false;
+//             if(!error){
+//                 resolve();
+//             }else{
+//                 console.log('something went wrong');
+//             }
+//         },2000)
+        
+//     })
+   
+// }
+
+
+
+// function deletePost()
+// {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+
+//             if(posts.length){
+//                 posts.pop();
+//                 resolve();
+//             }else{
+//                 console.log('something went wrong');
+//             }
+//         },1000)
+//     })
+// }
+
+
+// createPost({title:'post three',body:'thi is post three'})
+//     .then(()=>{
+//         getPost();
+//         deletePost().then(()=>{
+//             getPost();
+//             deletePost().then(()=>{
+//                 getPost();
+//                 deletePost().then(()=>{
+//                     getPost();
+//                     deletePost().then(getPost)
+//                     .catch((err)=>{console.log(err)});
+//                 })
+//             }
+//             )
+//         });
+        
+//     })
+//     .catch(err => console.log(err));
+
+
+
+
+
+// const promise1 = Promise.resolve('hello world');
+// const promise2 = 10;
+// const promise3 = new Promise((resolve, reject) => {
+//     setTimeout(resolve,2000,'good bye');
+// })
+
+// Promise.all([promise1,promise2,promise3]).then(values => console.log(values));
+
+// //.........................................................
+
+// const user={
+//     name:'abc',
+//     lastactivitytime:new Date()
+// };
+
+// function updateLastUserActivityTime()
+// {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(()=>{
+
+//             user.lastactivitytime = new Date();
+            
+//             resolve(user.lastactivitytime);
+
+//         },1000)
+//     })
+// }
+
+// console.log('before creation user activity time = '+user.lastactivitytime)
+// Promise.all([createPost({title:'post three',body:'thi is post three'}),updateLastUserActivityTime()])
+//     .then(([a,b]) => {
+//         console.log(posts);
+//         console.log('user activity time = '+b);
+//         deletePost().then(()=>console.log(posts));
+//     });
+
+    
+//----------------------------------------------------------------------------
+
+//promises using async await
+
+console.log('person 1: shows ticket');
+console.log('person 2:shows ticket');
+
+const preMovie = async () =>{
+
+    const pwife = new Promise((resolve, reject) => {
+        setTimeout(()=>resolve('ticket'))
+    },3000)
+
+    const getpop = new Promise((resolve, reject) => {
+        resolve('popcorn');
+    })
+
+    const getbutter = new Promise((resolve, reject) => {
+        resolve('butter');
+    })
+
+    const getcold = new Promise((resolve, reject) => {
+        resolve('coke');
+    })
+
+    let ticket = await pwife;
+
+    // console.log('wife:i have tickets');
+    // console.log('hus:we should go in');
+    // console.log('wife:i need pop');
+
+    // let pop = await getpop;
+
+    // console.log('hus:i got popcorn');
+    // console.log('wife:i need buttter on it');
+
+    // let butt = await getbutter;
+
+    // console.log('wife:we should go in');
+
+    // let cold = await getcold;
+
+    let [pop,butt,cold] = await Promise.all([getpop,getbutter,getcold]);
+
+
+    
+
+    return ticket;
+}
+
+preMovie().then((m) => console.log(m));
+
+console.log('person 4:shows ticket');
+console.log('person 5:shows ticket');
+
+//_____________________________________________________________________
+
+
+//createpost and delete post bt using async await
+        
+
+
+
+    const posts =[
         {title:'post one',body:'this is posst one'},
         {title:'post two',body:'this is post two'}
     ];
-    
-function getPost()
-{
-    setTimeout(()=>{
-        let op ='';
-        posts.forEach((post)=>{
-            op += `<li>${post.title}</li>`;
-        })
-        document.body.innerHTML = op;
-        
-    },1000)
-}
-//getPost();
-    
-function createPost(post)
-{
-    return new Promise((resolve, reject) => {
+
+
+    function getPost()
+        {
+            return new Promise((resolve, reject) => {
+                setTimeout(()=>{
+                    let op ='';
+                    posts.forEach((post)=>{
+                        op += `<li>${post.title}</li>`;
+                    })
+                    document.body.innerHTML = op;
+                    resolve('displayed');
+                    
+                },1000)
+            })
+           
+        }
+
+    function createPost(post){
+        return new Promise((resolve, reject) => {
         setTimeout(() =>{
             posts.push(post);
             
             const error = false;
             if(!error){
-                resolve();
+                resolve('post created');
             }else{
                 console.log('something went wrong');
             }
         },2000)
         
     })
+    }
    
-}
 
 
 
-function deletePost()
-{
-    return new Promise((resolve, reject) => {
+
+
+    function deletePost(){
+        return new Promise((resolve, reject) => {
         setTimeout(() => {
 
             if(posts.length){
                 posts.pop();
-                resolve();
+                resolve('post deleted');
             }else{
-                console.log('something went wrong');
+                reject('something went wrong');
             }
         },1000)
     })
+    }
+
+const postupdate = async ()=>{
+
+    try{
+        let create = await createPost({title:'post three',body:'this is post three'});
+        console.log(create);
+        let dis = await getPost();
+        console.log(dis);
+        let del = await deletePost();
+        console.log(del);
+        await getPost();
+        await deletePost();
+        await getPost();
+        await deletePost();
+        await getPost();
+        await deletePost();
+
+    }catch(err){ document.body.innerHTML = err;}
+   
+
+
+
 }
-
-
-createPost({title:'post three',body:'thi is post three'})
-    .then(()=>{
-        getPost();
-        deletePost().then(()=>{
-            getPost();
-            deletePost().then(()=>{
-                getPost();
-                deletePost().then(()=>{
-                    getPost();
-                    deletePost().then(getPost)
-                    .catch((err)=>{console.log(err)});
-                })
-            }
-            )
-        });
-        
-    })
-    .catch(err => console.log(err));
-
-
-
-
-
-const promise1 = Promise.resolve('hello world');
-const promise2 = 10;
-const promise3 = new Promise((resolve, reject) => {
-    setTimeout(resolve,2000,'good bye');
-})
-
-Promise.all([promise1,promise2,promise3]).then(values => console.log(values));
-
-//.........................................................
-
-const user={
-    name:'abc',
-    lastactivitytime:new Date()
-};
-
-function updateLastUserActivityTime()
-{
-    return new Promise((resolve, reject) => {
-        setTimeout(()=>{
-
-            user.lastactivitytime = new Date();
-            
-            resolve(user.lastactivitytime);
-
-        },1000)
-    })
-}
-
-console.log('before creation user activity time = '+user.lastactivitytime)
-Promise.all([createPost({title:'post three',body:'thi is post three'}),updateLastUserActivityTime()])
-    .then(([a,b]) => {
-        console.log(posts);
-        console.log('user activity time = '+b);
-        deletePost().then(()=>console.log(posts));
-    });
-
-    
+postupdate();
