@@ -34,6 +34,18 @@
         
       }
 
+window.addEventListener('DOMContentLoaded',()=> {
+
+    axios.get('https://crudcrud.com/api/ced4b69101d142afaf3fb884cff21435/appoinmentData')
+        .then((res)=>{
+            for(let i = 0;i < res.data.length;i ++)
+                addele(res.data[i])
+        })
+        .catch((err)=>{
+            msg.innerHTML = `<h6>${err}</h6>`
+        })
+})
+
 //function add element
 
       function addele(element){
