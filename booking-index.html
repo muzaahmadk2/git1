@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>booking Appoinment App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Booking Appoinment App</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form">
+        <h1>Add User</h1>
+        <div class="msg"></div>
+        <div >
+          <label for="name">Name:</label>
+          <input type="text" class="form-check-inline" id="name">
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="text" class="form-check-inline" id="email">
+        </div>
+        <input class="btn btn-dark" type="submit" value="Submit">
+      </form>
+
+      <ul id="users"></ul>
+
+      <ul class="items">
+      </ul> 
+    </section>
+    
+
+    <script src="book-appoinment.js"></script>
+  </body>
+</html>
