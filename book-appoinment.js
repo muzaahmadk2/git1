@@ -18,14 +18,15 @@
           email
         };
 
-        axios.post('https://crudcrud.com/api/ced4b69101d142afaf3fb884cff21435/appoinmentData',ele)
+        axios.post('https://crudcrud.com/api/4e6f4f561c134f5b81cf25df3acc8985/appoinmentData',ele)
             .then((res)=>{
-                addele(res.data);
+
+                addele(res.data)
                 
             })
             .catch((err)=>{
                
-                msg.innerHTML = `<h4>${err}<h4>`
+                msg.innerHTML += `<h4>${err}<h4>`
             })
         //addele(ele);
 
@@ -36,67 +37,57 @@
 
 window.addEventListener('DOMContentLoaded',()=> {
 
-    axios.get('https://crudcrud.com/api/ced4b69101d142afaf3fb884cff21435/appoinmentData')
+    axios.get('https://crudcrud.com/api/4e6f4f561c134f5b81cf25df3acc8985/appoinmentData')
         .then((res)=>{
             for(let i = 0;i < res.data.length;i ++)
                 addele(res.data[i])
         })
         .catch((err)=>{
-            msg.innerHTML = `<h6>${err}</h6>`
+            msg.innerHTML += `<h6>${err}</h6>`
         })
 })
 
 //function add element
 
       function addele(element){
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode(`${element.name} : `));
-        li.appendChild(document.createTextNode(element.email));
-  
-        // add edit button;
-        var ebutt = document.createElement('button');
-        ebutt.className = 'edit';
-        ebutt.appendChild(document.createTextNode('Edit'));
-        ebutt.style.marginLeft = '10px';
-        li.appendChild(ebutt);
-  
-        //add delete button
-        var dbutt = document.createElement('button');
-        dbutt.className = 'delete';
-        dbutt.appendChild(document.createTextNode('Delete'));
-        dbutt.style.marginLeft = '10px';
-        li.appendChild(dbutt);
-  
-  
-        userList.appendChild(li);
+        
+
+        child = `<li id =${element._id}>${element.name} : ${element.email} 
+        <button onclick=remove1('${element.name}','${element.email}','${element._id}')>Edit</button> 
+        <button onclick=remove('${element._id}')>Delete-user</button>
+        </li>`
+        userList.innerHTML += child;
   
       }
 
 //function to delete
 
-userList.addEventListener('click' , remove);
     function remove(e){
-      if(e.target.classList.contains('delete')){
-        
-          var li = e.target.parentElement;
-          userList.removeChild(li);
-        }
+      
+        axios.delete(`https://crudcrud.com/api/4e6f4f561c134f5b81cf25df3acc8985/appoinmentData/${e}`)
+            .then((res)=>{
+
+                let li = document.getElementById(e);
+                userList.removeChild(li)
+                
+            })
+            .catch((err)=>{
+
+                msg.innerHTML += `<h6>${err}</h6>`
+
+            })
+
       }
   
 //function to edit
 
-userList.addEventListener('click' , remove1);
-    function remove1(e){
-      if(e.target.classList.contains('edit')){
 
-        
-          var li = e.target.parentElement;
-          var ri1 = li.childNodes[0].textContent
-          var ri2 = li.childNodes[1].textContent
-          nameInput.value = ri1;
-          emailInput.value = ri2;
-          userList.removeChild(li);
+    function remove1(name,email,id){
+    
 
-        }
+        nameInput.value = name;
+        emailInput.value = email;
+        remove(id);
+
       }
 
