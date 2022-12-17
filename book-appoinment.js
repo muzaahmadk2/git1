@@ -65,7 +65,7 @@ window.addEventListener('DOMContentLoaded',()=> {
     function remove(e){
       
         axios.delete(`https://crudcrud.com/api/4e6f4f561c134f5b81cf25df3acc8985/appoinmentData/${e}`)
-            .then((res)=>{
+            .then(()=>{
 
                 let li = document.getElementById(e);
                 userList.removeChild(li)
